@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Jadwal;
 
 class KelasController extends Controller
 {
@@ -37,16 +38,24 @@ class KelasController extends Controller
     // Menampilkan detail kelas beserta daftar siswa yang terdaftar
     public function show($id)
     {
-        $kelas = Kelas::with('students.user')->findOrFail($id);
+        $kelas = Kelas::with([
+            'students.user',
+            'jadwal' => function ($query) {
+                $query->with(['pelajaran', 'user'])
+                      ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
+                      ->orderBy('jam_mulai', 'asc');
+            }
+        ])->findOrFail($id);
+
         return view('admin.kelas.detail', compact('kelas'));
-    }
+    } // End of show method
 
     // Form untuk mengedit data kelas
     public function edit($id)
     {
         $kelas = Kelas::findOrFail($id);
         return view('admin.kelas.edit', compact('kelas'));
-    }
+    } // End of edit method
 
     // Memperbarui data kelas
     public function update(Request $request, $id)
@@ -60,7 +69,7 @@ class KelasController extends Controller
         $kelas->update($request->only('name', 'description'));
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diperbarui.');
-    }
+    } // End of update method
 
     // Menghapus kelas
     public function destroy($id)
@@ -68,5 +77,5 @@ class KelasController extends Controller
         $kelas = Kelas::findOrFail($id);
         $kelas->delete();
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus.');
-    }
+    } // End of destroy method
 }

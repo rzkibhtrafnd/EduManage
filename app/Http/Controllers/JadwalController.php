@@ -12,7 +12,13 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $jadwal = Jadwal::with('kelas')->paginate(10);
+        // Mengambil semua data jadwal beserta relasi kelas, user (guru) dan pelajaran,
+        // diurutkan berdasarkan kelas, hari (sesuai urutan) dan jam_mulai
+        $jadwal = Jadwal::with(['kelas', 'user', 'pelajaran'])
+                    ->orderBy('kelas_id')
+                    ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
+                    ->orderBy('jam_mulai')
+                    ->paginate(10);
         return view('admin.jadwal.index', compact('jadwal'));
     }
 
@@ -40,11 +46,7 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
     }
 
-    public function show($id)
-    {
-        $jadwal = Jadwal::with('user', 'kelas', 'pelajaran')->findOrFail($id);
-        return view('admin.jadwal.detail', compact('jadwal'));
-    }
+    // Method show dihapus karena tidak lagi dibutuhkan
 
     public function edit($id)
     {

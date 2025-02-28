@@ -12,7 +12,9 @@
     <h2 class="text-xl font-semibold">{{ $kelas->name }}</h2>
     <p class="text-gray-600">{{ $kelas->description }}</p>
   </div>
-  <div>
+
+  <!-- Daftar Siswa -->
+  <div class="mb-8">
     <h3 class="text-lg font-semibold mb-2">Daftar Siswa</h3>
     @if($kelas->students->count() > 0)
       <table class="min-w-full text-left border">
@@ -37,5 +39,35 @@
       <p class="text-gray-600">Belum ada siswa yang terdaftar di kelas ini.</p>
     @endif
   </div>
+
+  <!-- Jadwal Kelas -->
+  <div>
+    <h3 class="text-lg font-semibold mb-2">Jadwal Kelas</h3>
+    @if($kelas->jadwal->count() > 0)
+      <table class="min-w-full text-left border">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2">Hari</th>
+            <th class="px-4 py-2">Jam</th>
+            <th class="px-4 py-2">Mata Pelajaran</th>
+            <th class="px-4 py-2">Guru</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($kelas->jadwal as $jadwal)
+          <tr class="hover:bg-gray-50 border-t">
+            <td class="px-4 py-2">{{ $jadwal->hari }}</td>
+            <td class="px-4 py-2">{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</td>
+            <td class="px-4 py-2">{{ optional($jadwal->pelajaran)->nama ?? 'N/A' }}</td>
+            <td class="px-4 py-2">{{ optional($jadwal->user)->name ?? 'N/A' }}</td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    @else
+      <p class="text-gray-600">Belum ada jadwal yang tersedia untuk kelas ini.</p>
+    @endif
+  </div>
+
 </div>
 @endsection
