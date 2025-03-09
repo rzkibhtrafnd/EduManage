@@ -1,0 +1,76 @@
+@extends('layouts.muridapp') {{-- Gunakan layout khusus untuk guru, atau gunakan layouts.adminapp jika belum ada layout khusus --}}
+
+@section('title', 'Jadwal Mengajar Saya')
+
+@section('content')
+<div class="container mx-auto mt-8">
+  <div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Jadwal Pelajaran Saya</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-left">
+        <thead class="bg-gray-100 border-b">
+          <tr>
+            <th class="px-4 py-2">Kelas</th>
+            <th class="px-4 py-2">Hari</th>
+            <th class="px-4 py-2">Jam</th>
+            <th class="px-4 py-2">Pelajaran</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($jadwal as $item)
+            <tr class="hover:bg-gray-50 border-t">
+              <td class="px-4 py-2">{{ $item->kelas->name }}</td>
+              <td class="px-4 py-2">{{ $item->hari }}</td>
+              <td class="px-4 py-2">{{ $item->jam_mulai }} - {{ $item->jam_selesai }}</td>
+              <td class="px-4 py-2">{{ $item->pelajaran->nama }}</td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="6" class="text-center px-4 py-2 border-t">Tidak ada jadwal untuk Anda.</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+    <!-- Pagination -->
+    <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 mt-4">
+      <div class="flex flex-1 justify-between sm:hidden">
+        @if($jadwal->previousPageUrl())
+          <a href="{{ $jadwal->previousPageUrl() }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            Previous
+          </a>
+        @endif
+        @if($jadwal->nextPageUrl())
+          <a href="{{ $jadwal->nextPageUrl() }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            Next
+          </a>
+        @endif
+      </div>
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <p class="text-sm text-gray-700">
+          Menampilkan <span class="font-medium">{{ $jadwal->firstItem() }}</span>
+          sampai <span class="font-medium">{{ $jadwal->lastItem() }}</span>
+          dari <span class="font-medium">{{ $jadwal->total() }}</span> data
+        </p>
+        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+          @if($jadwal->previousPageUrl())
+            <a href="{{ $jadwal->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+              <span class="sr-only">Previous</span>&laquo;
+            </a>
+          @endif
+          @for ($i = 1; $i <= $jadwal->lastPage(); $i++)
+            <a href="{{ $jadwal->url($i) }}" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold {{ $jadwal->currentPage() == $i ? 'bg-indigo-600 text-white' : 'text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50' }}">
+              {{ $i }}
+            </a>
+          @endfor
+          @if($jadwal->nextPageUrl())
+            <a href="{{ $jadwal->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+              <span class="sr-only">Next</span>&raquo;
+            </a>
+          @endif
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection

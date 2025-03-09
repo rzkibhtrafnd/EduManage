@@ -16,4 +16,9 @@ class Pelajaran extends Model
     {
         return $this->hasMany(Jadwal::class);
     }
+
+    public function materis()
+    {
+        return $this->hasMany(Materi::class);
+    }
 }

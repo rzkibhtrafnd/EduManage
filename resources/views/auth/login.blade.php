@@ -9,9 +9,14 @@
 <body class="font-[sans-serif] bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-lg">
         <h3 class="text-gray-800 text-3xl font-extrabold text-center">Sign in</h3>
-        @if(session('error'))
-            <p class="text-red-500 text-sm text-center mt-4">{{ session('error') }}</p>
-        @endif
+        @if ($errors->any())
+        <div class="bg-red-500 text-white p-3 rounded">
+            @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
 
         <form action="{{ route('login') }}" method="POST" class="mt-6">
             @csrf

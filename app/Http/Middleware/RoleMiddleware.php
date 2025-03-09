@@ -10,11 +10,19 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role)
     {
-        if (Auth::check() && Auth::user()->role == $role) {
-            return $next($request);
+        if (!Auth::check()) {
+            return redirect()->route('login');
         }
 
-        return redirect()->route('login')->with('error', 'Akses ditolak');
+        // Konversi role ke integer
+        $requiredRole = (int)$role;
+        $userRole = Auth::user()->role;
+
+        if ($userRole !== $requiredRole) {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Akses ditolak. Role tidak sesuai.');
+        }
+
+        return $next($request);
     }
 }
-

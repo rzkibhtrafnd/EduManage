@@ -80,4 +80,25 @@ class JadwalController extends Controller
         $jadwal->delete();
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
     }
+
+    // Method untuk menampilkan jadwal guru
+    public function guruIndex()
+    {
+        $jadwal = Jadwal::where('guru_id', auth()->user()->id)
+                    ->orderBy('hari')
+                    ->orderBy('jam_mulai')
+                    ->paginate(10);
+        return view('guru.jadwal.index', compact('jadwal'));
+    }
+
+    // Method untuk menampilkan jadwal murid
+    public function muridIndex()
+    {
+        $jadwal = Jadwal::with(['kelas', 'user', 'pelajaran'])
+                    ->orderBy('kelas_id')
+                    ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
+                    ->orderBy('jam_mulai')
+                    ->paginate(10);
+        return view('murid.jadwal.index', compact('jadwal'));
+    }
 }

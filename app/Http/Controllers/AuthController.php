@@ -22,7 +22,9 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // Regenerate session untuk keamanan
             $user = Auth::user();
+            //dd($user);
 
             // Redirect berdasarkan role
             switch ($user->role) {
@@ -40,13 +42,17 @@ class AuthController extends Controller
             }
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah']);
+        return back()->withErrors([
+            'email' => 'Email atau password salah',
+        ]);
     }
 
     // Logout user
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate(); // Invalidate session
+        $request->session()->regenerateToken(); // Regenerate CSRF token
         return redirect()->route('login');
     }
 }
