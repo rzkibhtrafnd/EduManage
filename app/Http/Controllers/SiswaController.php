@@ -13,7 +13,6 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        // Ambil data siswa beserta relasi user
         $siswas = Siswa::with('user')->paginate(10);
         return view('admin.siswa.index', compact('siswas'));
     }
@@ -35,7 +34,7 @@ class SiswaController extends Controller
             'jenis_kelamin'  => 'required|in:Laki-laki,Perempuan',
             'telepon'        => 'required|string|max:15',
             'img'            => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'kelas_id'       => 'required|exists:kelas,id'
+            'kelas_id'       => 'required|exists:kelas,id',
         ]);
 
         $imgPath = null;
@@ -65,7 +64,6 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        // Gunakan id siswa (primary key pada tabel siswa)
         $siswa = Siswa::with('user', 'kelas')->findOrFail($id);
         return view('admin.siswa.detail', compact('siswa'));
     }
@@ -90,7 +88,7 @@ class SiswaController extends Controller
             'jenis_kelamin'  => 'required|in:Laki-laki,Perempuan',
             'telepon'        => 'required|string|max:15',
             'img'            => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'kelas_id'       => 'required|exists:kelas,id'
+            'kelas_id'       => 'required|exists:kelas,id',
         ]);
 
         $imgPath = $siswa->img;

@@ -24,35 +24,34 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'NIP' => 'required|string|unique:guru,NIP',
-            'alamat' => 'required|string',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email',
+            'password'      => 'required|min:6',
+            'NIP'           => 'required|string|unique:guru,NIP',
+            'alamat'        => 'required|string',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'telepon' => 'required|string|max:15',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'telepon'       => 'required|string|max:15',
+            'img'           => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $imgPath = null;
-        if ($request->hasFile('img')) {
-            $imgPath = $request->file('img')->store('guru_images', 'public');
-        }
+        $imgPath = $request->hasFile('img')
+            ? $request->file('img')->store('guru_images', 'public')
+            : null;
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 2,
+            'role'     => 2,
         ]);
 
         Guru::create([
-            'user_id' => $user->id,
-            'NIP' => $request->NIP,
-            'alamat' => $request->alamat,
+            'user_id'       => $user->id,
+            'NIP'           => $request->NIP,
+            'alamat'        => $request->alamat,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'telepon' => $request->telepon,
-            'img' => $imgPath,
+            'telepon'       => $request->telepon,
+            'img'           => $imgPath,
         ]);
 
         return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan');
@@ -76,35 +75,35 @@ class GuruController extends Controller
         $user = $guru->user;
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6',
-            'NIP' => 'required|string|unique:guru,NIP,' . $guru->id,
-            'alamat' => 'required|string',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email,' . $user->id,
+            'password'      => 'nullable|min:6',
+            'NIP'           => 'required|string|unique:guru,NIP,' . $guru->id,
+            'alamat'        => 'required|string',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'telepon' => 'required|string|max:15',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'telepon'       => 'required|string|max:15',
+            'img'           => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('img')) {
             if ($guru->img) {
                 Storage::disk('public')->delete($guru->img);
             }
-            $imgPath = $request->file('img')->store('guru_images', 'public');
-            $guru->img = $imgPath;
+            $guru->img = $request->file('img')->store('guru_images', 'public');
         }
 
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
 
         $guru->update([
-            'NIP' => $request->NIP,
-            'alamat' => $request->alamat,
+            'NIP'           => $request->NIP,
+            'alamat'        => $request->alamat,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'telepon' => $request->telepon,
+            'telepon'       => $request->telepon,
+            'img'           => $guru->img,
         ]);
 
         return redirect()->route('guru.index')->with('success', 'Guru berhasil diperbarui');

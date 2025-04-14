@@ -31,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          @forelse($materi as $item)
+          @forelse($materis as $item)
           <tr class="hover:bg-gray-50">
             <td class="px-4 py-2 border-t">{{ $loop->iteration }}</td>
             <td class="px-4 py-2 border-t">{{ $item->title }}</td>
@@ -54,32 +54,32 @@
     <!-- Pagination -->
     <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 mt-4">
       <div class="flex flex-1 justify-between sm:hidden">
-        @if($materi->previousPageUrl())
-          <a href="{{ $materi->previousPageUrl() }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+        @if($materis->previousPageUrl())
+          <a href="{{ $materis->previousPageUrl() }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
         @endif
-        @if($materi->nextPageUrl())
-          <a href="{{ $materi->nextPageUrl() }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+        @if($materis->nextPageUrl())
+          <a href="{{ $materis->nextPageUrl() }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
         @endif
       </div>
       <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <p class="text-sm text-gray-700">
-          Menampilkan <span class="font-medium">{{ $materi->firstItem() }}</span>
-          sampai <span class="font-medium">{{ $materi->lastItem() }}</span>
-          dari <span class="font-medium">{{ $materi->total() }}</span> data
+          Menampilkan <span class="font-medium">{{ $materis->firstItem() }}</span>
+          sampai <span class="font-medium">{{ $materis->lastItem() }}</span>
+          dari <span class="font-medium">{{ $materis->total() }}</span> data
         </p>
         <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
-          @if($materi->previousPageUrl())
-            <a href="{{ $materi->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+          @if($materis->previousPageUrl())
+            <a href="{{ $materis->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
               <span class="sr-only">Previous</span>&laquo;
             </a>
           @endif
-          @for ($i = 1; $i <= $materi->lastPage(); $i++)
-            <a href="{{ $materi->url($i) }}" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold {{ $materi->currentPage() == $i ? 'bg-indigo-600 text-white' : 'text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50' }}">
+          @for ($i = 1; $i <= $materis->lastPage(); $i++)
+            <a href="{{ $materis->url($i) }}" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold {{ $materis->currentPage() == $i ? 'bg-indigo-600 text-white' : 'text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50' }}">
               {{ $i }}
             </a>
           @endfor
-          @if($materi->nextPageUrl())
-            <a href="{{ $materi->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+          @if($materis->nextPageUrl())
+            <a href="{{ $materis->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
               <span class="sr-only">Next</span>&raquo;
             </a>
           @endif

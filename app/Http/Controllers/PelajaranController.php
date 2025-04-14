@@ -22,7 +22,7 @@ class PelajaranController extends Controller
     {
         $request->validate([
             'nama'      => 'required|string|max:255',
-            'deskripsi' => 'required|string'
+            'deskripsi' => 'required|string',
         ]);
 
         Pelajaran::create($request->only(['nama', 'deskripsi']));
@@ -38,7 +38,7 @@ class PelajaranController extends Controller
     {
         $request->validate([
             'nama'      => 'required|string|max:255',
-            'deskripsi' => 'required|string'
+            'deskripsi' => 'required|string',
         ]);
 
         $pelajaran->update($request->only(['nama', 'deskripsi']));

@@ -17,7 +17,6 @@ class Jadwal extends Model
         return $this->belongsTo(Kelas::class);
     }
 
-    // Perbaiki relasi ke User dengan menentukan foreign key 'guru_id'
     public function user()
     {
         return $this->belongsTo(User::class, 'guru_id');

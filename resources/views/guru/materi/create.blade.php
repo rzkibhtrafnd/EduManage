@@ -3,52 +3,65 @@
 @section('title', 'Tambah Materi - ' . $pelajaran->nama)
 
 @section('content')
-<div class="container mx-auto mt-8">
-  <div class="bg-white shadow-lg rounded-lg p-6">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-      <h2 class="text-2xl font-bold text-gray-800 mb-2 md:mb-0">Tambah Materi untuk {{ $pelajaran->nama }}</h2>
-      <a href="{{ route('guru.materi.show', $pelajaran->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
-      </a>
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-bold text-gray-800">Tambah Materi untuk {{ $pelajaran->nama }}</h1>
+    <a href="{{ route('guru.materi.show', $pelajaran->id) }}" class="text-gray-600 hover:text-gray-800">
+      <i class="fas fa-arrow-left mr-2"></i> Kembali
+    </a>
+  </div>
+
+  <form action="{{ route('guru.materi.store', $pelajaran->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    @csrf
+
+    <div>
+      <label for="kelas_id" class="block text-gray-700 font-medium mb-1">Kelas</label>
+      <select name="kelas_id" id="kelas_id" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500">
+        <option value="">-- Pilih Kelas --</option>
+        @foreach($kelas as $k)
+          <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
+        @endforeach
+      </select>
+      @error('kelas_id')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+      @enderror
     </div>
 
-    @if ($errors->any())
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        <ul>
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-      </div>
-    @endif
+    <div>
+      <label for="title" class="block text-gray-700 font-medium mb-1">Judul Materi</label>
+      <input type="text" name="title" id="title" value="{{ old('title') }}" required 
+             class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500">
+      @error('title')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+      @enderror
+    </div>
 
-    <form action="{{ route('guru.materi.store', $pelajaran->id) }}" method="POST" enctype="multipart/form-data">
-      @csrf
-      <div class="mb-4">
-        <label for="kelas_id" class="block text-gray-700 font-semibold">Kelas</label>
-        <select name="kelas_id" id="kelas_id" class="w-full border-gray-300 rounded-md p-2" required>
-          <option value="">-- Pilih Kelas --</option>
-          @foreach($kelas as $k)
-            <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
-          @endforeach
-        </select>
-      </div>
-      <div class="mb-4">
-        <label for="title" class="block text-gray-700 font-semibold">Judul Materi</label>
-        <input type="text" name="title" id="title" value="{{ old('title') }}" class="w-full border-gray-300 rounded-md p-2" required>
-      </div>
-      <div class="mb-4">
-        <label for="description" class="block text-gray-700 font-semibold">Deskripsi</label>
-        <textarea name="description" id="description" rows="4" class="w-full border-gray-300 rounded-md p-2">{{ old('description') }}</textarea>
-      </div>
-      <div class="mb-4">
-        <label for="file" class="block text-gray-700 font-semibold">File Materi (PDF, Video, PPT)</label>
-        <input type="file" name="file" id="file" class="w-full border-gray-300 rounded-md p-2" required>
-      </div>
-      <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+    <div>
+      <label for="description" class="block text-gray-700 font-medium mb-1">Deskripsi</label>
+      <textarea name="description" id="description" rows="4"
+                class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500">{{ old('description') }}</textarea>
+      @error('description')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+      @enderror
+    </div>
+
+    <div>
+      <label for="file" class="block text-gray-700 font-medium mb-1">File Materi (PDF, Video, PPT)</label>
+      <input type="file" name="file" id="file" required 
+             class="w-full border border-gray-300 px-4 py-2 rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+      @error('file')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+      @enderror
+    </div>
+
+    <div class="flex justify-end space-x-3">
+      <a href="{{ route('guru.materi.show', $pelajaran->id) }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">
+        Batal
+      </a>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
         <i class="fas fa-save mr-2"></i> Simpan
       </button>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 @endsection

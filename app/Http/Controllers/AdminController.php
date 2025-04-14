@@ -14,7 +14,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar admin.
      */
     public function index()
     {
@@ -23,7 +23,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new admin.
+     * Form tambah admin baru.
      */
     public function create()
     {
@@ -31,28 +31,28 @@ class AdminController extends Controller
     }
 
     /**
-     * Store a newly created admin in storage.
+     * Simpan admin baru.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 1,
+            'role'     => 1,
         ]);
 
         return redirect()->route('admin.index')->with('success', 'Admin berhasil ditambahkan!');
     }
 
     /**
-     * Show the form for editing the specified admin.
+     * Form edit admin.
      */
     public function edit(User $admin)
     {
@@ -64,7 +64,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Update the specified admin in storage.
+     * Update data admin.
      */
     public function update(Request $request, User $admin)
     {
@@ -73,14 +73,14 @@ class AdminController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $admin->id,
-            'password' => 'nullable|min:6',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users,email,' . $admin->id,
+            'password' => 'nullable|string|min:6',
         ]);
 
         $admin->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $admin->password,
         ]);
 
@@ -88,7 +88,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Remove the specified admin from storage.
+     * Hapus admin.
      */
     public function destroy(User $admin)
     {
@@ -97,6 +97,7 @@ class AdminController extends Controller
         }
 
         $admin->delete();
+
         return redirect()->route('admin.index')->with('success', 'Admin berhasil dihapus!');
     }
 }

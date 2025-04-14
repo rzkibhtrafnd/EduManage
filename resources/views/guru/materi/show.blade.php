@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
       <h2 class="text-2xl font-bold text-gray-800 mb-2 md:mb-0">Materi Pelajaran: {{ $pelajaran->nama }}</h2>
       <div class="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
-        <a href="{{ route('guru.materi.show', $pelajaran->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
+        <a href="{{ route('guru.materi.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
           <i class="fas fa-arrow-left mr-2"></i> Kembali
         </a>
         <a href="{{ route('guru.materi.create', $pelajaran->id) }}" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">

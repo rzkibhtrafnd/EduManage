@@ -7,24 +7,28 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // Menampilkan form login
+    /**
+     * Menampilkan form login.
+     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // Proses login
+    /**
+     * Proses login user.
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required|min:6',
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // Regenerate session untuk keamanan
+            $request->session()->regenerate();
+
             $user = Auth::user();
-            //dd($user);
 
             // Redirect berdasarkan role
             switch ($user->role) {
@@ -38,21 +42,24 @@ class AuthController extends Controller
                     return redirect()->route('orangtua.dashboard');
                 default:
                     Auth::logout();
-                    return redirect()->route('login')->with('error', 'Role tidak valid');
+                    return redirect()->route('login')->with('error', 'Role tidak valid.');
             }
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah',
+            'email' => 'Email atau password salah.',
         ]);
     }
 
-    // Logout user
+    /**
+     * Logout user dan reset session.
+     */
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate(); // Invalidate session
-        $request->session()->regenerateToken(); // Regenerate CSRF token
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }
